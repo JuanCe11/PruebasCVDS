@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.eci.cvds.persistence.mybatisimpl.mappers.RecursoMapper">
+    <resultMap id="RecursoResult" type="Recurso">
+        <id property="identificadorInterno" column="id_interno"/>
+        <result property="nombre" column="nombre"/>
+        <result property="ubicacion" column="ubicacion"/>
+        <result property="capacidad" column="capacidad"/>
+        <result property="estado" column="estado"/>
+        <association property="tipoRecurso" javaType="TipoRecurso" resultMap="TipoRecursoResult" columnPrefix="tr_"></association>
+    </resultMap>
+
+    <insert id="agregarNuevoRecurso" parameterType="map">
+        insert into RECURSOS(id_interno,nombre,ubicacion,capacidad,TIPORECURSO_id) value
+        (#{recurso.identificadorInterno},#{recurso.nombre},#{recurso.ubicacion},#{recurso.capacidad},#{recurso.tipoRecurso.id});
+    </insert>
+
+    <delete id="eliminarRecursoPermanente" parameterType="map">
+        delete from RECURSOS where(id_interno=#{recurso.identificadorInterno});
+    </delete>
+
+    <update id="eliminarRecursoTemporal" parameterType="map">
+        update RECURSOS SET estado=false WHERE id_interno=#{recurso.identificadorInterno};
+    </update>
+
+    <update id="volverAAdmitirRecurso" parameterMap="map">
+        update RECURSOS SET estado=true WHERE id_interno=#{recurso.identificadorInterno};
+    </update>
+
+    <select id="consultarRecursos" parameterType="map" resultMap="RecursoResult">
+        select * FROM RECURSOS;
+    </select>
+</mapper>
