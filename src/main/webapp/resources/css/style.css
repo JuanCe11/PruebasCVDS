@@ -130,3 +130,7 @@ input::-moz-focus-inner {
 #ingresar:active {
   color: #d0d0d2;
 }
+
+.ui-button .ui-button-text{
+   font-size:14px;
+}
