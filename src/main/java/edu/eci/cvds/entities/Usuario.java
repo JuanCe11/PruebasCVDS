@@ -4,21 +4,36 @@ import java.io.Serializable;
 public class Usuario implements Serializable{
 
     private String nombre;
-    private String apellido;
-    private String clave;
+    private String passw;
     private String tipo;
-    private String correo;
+    private String id;
+    private Integer carnet;
 
 
-    public Usuario() {
+    public Usuario() { super(); }
+
+    public Usuario(String nombre,String passw,String tipo,String id,Integer carnet) {
+        this.nombre = nombre;
+        this.passw=passw;
+        this.tipo = tipo;
+        this.id=id;
+        this.carnet=carnet;
     }
 
-    public Usuario(String nombre, String apellido, String clave, String tipo, String correo) {
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.clave = clave;
-        this.tipo = tipo;
-        this.correo = correo;
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public Integer getCarnet() {
+        return carnet;
+    }
+
+    public void setCarnet(Integer carnet) {
+        this.carnet = carnet;
     }
 
     public String getNombre() {
@@ -29,20 +44,12 @@ public class Usuario implements Serializable{
         this.nombre = nombre;
     }
 
-    public String getApellido() {
-        return apellido;
+    public String getPassw() {
+        return passw;
     }
 
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
-    }
-
-    public String getClave() {
-        return clave;
-    }
-
-    public void setClave(String clave) {
-        this.clave = clave;
+    public void setPassw(String passw) {
+        this.passw = passw;
     }
 
     public String getTipo() {
@@ -53,16 +60,8 @@ public class Usuario implements Serializable{
         this.tipo = tipo;
     }
 
-    public String getCorreo() {
-        return correo;
-    }
-
-    public void setCorreo(String correo) {
-        this.correo = correo;
-    }
-
     @Override
     public String toString() {
-        return "Estudiante{nombre=" + nombre + " " + apellido + ", tipo=\n\t" + tipo + '}';
+        return id+" "+nombre+" "+tipo;
     }
 }

@@ -1,14 +1,25 @@
 package edu.eci.cvds.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Recurso implements Serializable {
     private String nombre;
     private String ubicacion;
     private TipoRecurso tipoRecurso;
-    private String identificadorInterno;
+    private int identificadorInterno;
     private Integer capacidad;
-    private boolean estado;
+    private String estado;
+    private List<String> estados;
+
+    public Recurso(){
+        super();
+        estados = new ArrayList<String>();
+        estados.add("Disponible");
+        estados.add("No Disponible");
+        estados.add("Mantenimiento");
+    }
 
     /**
      * Constructor de la clase Recurso
@@ -18,14 +29,33 @@ public class Recurso implements Serializable {
      * @param identificadorInterno El identificador interno
      * @param capacidad La capacidad del recurso
      */
-    public Recurso(String nombre,String ubicacion,TipoRecurso tipoRecurso,boolean estado,String identificadorInterno,Integer capacidad){
+    public Recurso(String nombre,String ubicacion,TipoRecurso tipoRecurso,String estado,int identificadorInterno,Integer capacidad){
         this.nombre=nombre;
         this.ubicacion=ubicacion;
         this.tipoRecurso=tipoRecurso;
         this.identificadorInterno=identificadorInterno;
         this.capacidad=capacidad;
         this.estado=estado;
+        estados = new ArrayList<String>();
+        estados.add("Disponible");
+        estados.add("No Disponible");
+        estados.add("Mantenimiento");
     }
+
+
+    public Recurso(int identificadorInterno,int idTipo,String nombre,String ubicacion,Integer capacidad,String estado,int idTipo2,String nombreTipo){
+        this.nombre=nombre;
+        this.ubicacion=ubicacion;
+        this.tipoRecurso=new TipoRecurso(idTipo,nombreTipo);
+        this.identificadorInterno=identificadorInterno;
+        this.capacidad=capacidad;
+        this.estado=estado;
+        estados = new ArrayList<String>();
+        estados.add("Disponible");
+        estados.add("No Disponible");
+        estados.add("Mantenimiento");
+    }
+
 
     /**
      * Getter de la capacidad
@@ -39,7 +69,7 @@ public class Recurso implements Serializable {
      * Getter del identificado interno
      * @return el identificador interno
      */
-    public String getIdentificadorInterno() {
+    public int getIdentificadorInterno() {
         return identificadorInterno;
     }
 
@@ -79,7 +109,7 @@ public class Recurso implements Serializable {
      * Setter del identificador interno
      * @param identificadorInterno el nuevo identificador interno
      */
-    public void setIdentificadorInterno(String identificadorInterno) {
+    public void setIdentificadorInterno(int identificadorInterno) {
         this.identificadorInterno = identificadorInterno;
     }
 
@@ -111,7 +141,7 @@ public class Recurso implements Serializable {
      * Setter del estado
      * @param estado el nuevo estado
      */
-    public void setEstado(boolean estado) {
+    public void setEstado(String estado) {
         this.estado = estado;
     }
 
@@ -119,8 +149,15 @@ public class Recurso implements Serializable {
      * Obtenedor del estado
      * @return el estado
      */
-    public boolean isEstado() {
+    public String getEstado() {
         return estado;
+    }
+    
+    public List<String> getEstados() {
+        return estados;
+    }
+    public void setEstados(List<String> estados){
+        this.estados = estados;
     }
 
     @Override

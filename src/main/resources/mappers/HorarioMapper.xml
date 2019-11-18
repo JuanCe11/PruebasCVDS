@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="edu.eci.cvds.persistence.mybatisimpl.mappers.HorarioMapper">
+    <resultMap id="HorarioResult" type="edu.eci.cvds.entities.Horario">
+        <id property="id" column="id"/>
+        <result property="horaInicio" column="hora_inicio"/>
+        <result property="horaFin" column="hora_fin"/>
+        <association property="recurso" javaType="edu.eci.cvds.entities.Recurso" resultMap="RecursoResult"
+                     columnPrefix="r_"/>
+    </resultMap>
+
+    <select id="horarios" parameterType="map" resultMap="HorarioResult">
+        select * from recurso left join horario on id_interno=id;
+    </select>
+
+</mapper>
