@@ -13,20 +13,17 @@
 
         <link rel="icon" type="image/png" href="/resources/img/libro.png" />
         <link href="/resources/css/login.css" rel="stylesheet" />
-        <!--link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css" /-->
-
-        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/uikit/3.0.2/css/uikit.min.css" />
-        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/dataTables.uikit.min.css" />
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css" />
 
         <script type="text/javascript" charset="utf8"
         src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
 
     </h:head>
     <h:body style="margin:0px; padding:0px;">
-        <div class="image">
-            <img src="/resources/img/banner-biblioteca.jpg" style="width:250px;"></img>
-        </div>
         <div class="head">
+            <div class="image">
+                <img src="/resources/img/banner-biblioteca.jpg" style="width:250px;"></img>
+            </div>
             <div class="logout">
                 <h:form id="frmm">
                     <p:commandButton value="Cerrar sesión" class="dropdown-item"
@@ -66,7 +63,7 @@
                                         <p:growl id="message" showDetail="true" />
                                         <p:commandButton class="buttonR"  value="Reservar Recurso" update="message">
                                             <p:confirm header="Confirmación" message="¿Desea reservar el recurso #{recursos.nombre}?" icon="pi pi-exclamation-triangle" />
-                                            <f:actionListener binding="#{recursoBean.horariosPage(recursos.identificadorInterno)}" update="frmm3"/>
+                                            <f:actionListener binding="#{recursoBean.horariosPage(recursos.identificadorInterno)}" update="Registro_table"/>
                                         </p:commandButton>
 
                                         <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
@@ -83,7 +80,7 @@
                 </table>
             </h:panelGroup>
         </p:panel>
-
+        <br/>
         <script>
             $(document).ready(function () {
                 $('#Registro_table').DataTable();

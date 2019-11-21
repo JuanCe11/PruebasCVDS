@@ -11,21 +11,21 @@
         <title>Consultar Horario Recurso</title>
     </h:head>
     <h:body style="margin:0px; padding:0px;">
-        <div class="image">
-            <img src="/resources/img/banner-biblioteca.jpg" style="width:250px;"></img>
+        <div class="head">
+            <div class="image">
+                <img src="/resources/img/banner-biblioteca.jpg" style="width:250px;"></img>
+            </div>
+            <div class="logout">
+                <h:form id="frmm">
+                    <p:commandButton value="Regresar" class="dropdown-item"
+                                     action="#{recursoBean.reloadGuest()}" />
+                </h:form>
+            </div>
+            <div id="divbarraid" class="divbarra">
+                <h1>Horario del recurso</h1>
+            </div>
         </div>
-        <div class="logout">
-            <h:form id="frmm">
-                <p:commandButton value="Regresar" class="dropdown-item"
-                                 action="#{recursoBean.reloadUser()}" />
-            </h:form>
-        </div>
-        <div class="clearfix"></div>
 
-        <br></br>
-        <div id="divbarraid" class="divbarra">
-            <center>Horario del recurso </center>
-        </div>
         <br></br>
 
         <div>
@@ -64,7 +64,7 @@
                 </p:dialog>    
             </h:form>
         </div>
-
+        <br/>
         <!-- Footer -->
         <div class="footerlogin" id="footerloginid"></div>
         <!-- Footer -->

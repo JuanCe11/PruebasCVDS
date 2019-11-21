@@ -9,11 +9,39 @@ import java.sql.Timestamp;
 import java.util.List;
 
 public interface ReservaMapper {
+    /**
+     * Reserva un recurso
+     * @param recurso El recurso a reservar
+     * @param usuario El usuario que realiza la reserva
+     * @param fechaIni La fecha de inicio de la reserva
+     * @param fechaFin La fecha de finalizacion de la reserva
+     */
     void reservarRecurso(@Param("recurso") Recurso recurso, @Param("usuario")Usuario usuario, @Param("fechaIni") Timestamp fechaIni,@Param("fechaFin") Timestamp fechaFin);
 
+    /**
+     * Consulta las reservas de un usuario
+     * @param id El id del usuario que consulta las reservas
+     * @return Consulta las reservas de un usuario
+     */
     List<Reserva> consultarReservasUsuario(@Param("id") String id);
 
+    /**
+     * Consulta todas las reservas activas
+     * @return todas las reservas
+     */
     List<Reserva> consultarReservas();
 
-    Reserva consultarReservaRecurso(@Param("recurso") Recurso recurso);
+
+    /**
+     * Consulta las reservas de un recurso
+     * @param recurso El recurso del que se desea consultar la reserva
+     * @return Las reservas de ese recurso
+     */
+    List<Reserva> consultarReservaRecurso(@Param("recurso") Recurso recurso);
+
+    /**
+     * Eliminar una reserva
+     * @param reserva La reserva a eliminar
+     */
+    void eliminarReserva(@Param("reserva") Reserva reserva);
 }

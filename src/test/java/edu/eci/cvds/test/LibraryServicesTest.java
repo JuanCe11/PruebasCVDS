@@ -3,14 +3,12 @@ package edu.eci.cvds.test;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import com.google.inject.Inject;
 import edu.eci.cvds.entities.Recurso;
+import edu.eci.cvds.entities.Reserva;
 import edu.eci.cvds.entities.TipoRecurso;
 import edu.eci.cvds.entities.Usuario;
 import edu.eci.cvds.services.*;
@@ -25,7 +23,7 @@ public class LibraryServicesTest{
     @Inject
     ServicesLibrary servicesLibrary;
     private Recurso recurso=new Recurso("El PC","Central",new TipoRecurso(1,"Computador"),"Disponible",500,null);
-    private Usuario usuario=new Usuario("Hola","123456","regular","regular@cvds.com",123456);
+    private Usuario usuario=new Usuario("Hola","123456","regular","regular@cvds.com",123456,"Ingenieria de Sistemas");
 
     @Before
     public void setUp(){}
@@ -34,12 +32,6 @@ public class LibraryServicesTest{
         administratorServices=ServicesLibraryFactory.getInstance().testAdminServicesLibrary();
         servicesLibrary=ServicesLibraryFactory.getInstance().testServicesLibrary();
     }
-
-    @Test
-    public void LaQueEstaObligadaAPasar(){
-        boolean ans=true;
-    }
-
 
     @Test
     public void deberiaConsultarTodosLosRecursos() throws LibraryServicesException {
@@ -102,8 +94,37 @@ public class LibraryServicesTest{
         Timestamp fechaFin=new Timestamp(System.currentTimeMillis()+7200000);
         recurso.setIdentificadorInterno(administratorServices.consultarRecursosAdmin().get(0).getIdentificadorInterno());
         servicesLibrary.reservarRecurso(recurso,usuario,fechaIni,fechaFin);
-        assertTrue(servicesLibrary.consultarReservasUsuario(usuario.getId()).size()==1);
-        assertTrue(servicesLibrary.consultarReservas().size()==1);
+        assertTrue(servicesLibrary.consultarReservasUsuario(usuario.getId()).get(0).getUsuario().getId().equals("regular@cvds.com"));
+        assertTrue(servicesLibrary.consultarReservas().get(0).getRecurso().getIdentificadorInterno()==administratorServices.consultarRecursosAdmin().get(0).getIdentificadorInterno());
         assertTrue(servicesLibrary.consultarReservaRecurso(recurso)!=null);
+    }
+
+    @Test
+    public void noDebePermitirReservasMayoresADosHoras(){
+        Timestamp fechaIni=new Timestamp(System.currentTimeMillis());
+        Timestamp fechaFin=new Timestamp(System.currentTimeMillis()+7200001);
+        try{
+            servicesLibrary.reservarRecurso(recurso,usuario,fechaIni,fechaFin);
+        }catch (LibraryServicesException e){
+            assertTrue(e.getMessage().equals(LibraryServicesException.RESERVA_MAYOR_A_DOS_HORAS));
+        }
+    }
+
+    @Test
+    public void noDebePermitirSobrePonerReservas(){
+        Timestamp fechaIni=new Timestamp(System.currentTimeMillis());
+        Timestamp fechaFin=new Timestamp(System.currentTimeMillis()+7200000);
+        try {
+            recurso.setIdentificadorInterno(administratorServices.consultarRecursosAdmin().get(0).getIdentificadorInterno());
+            servicesLibrary.reservarRecurso(recurso, usuario, fechaIni, fechaFin);
+            servicesLibrary.reservarRecurso(recurso,usuario,fechaIni,fechaFin);
+        }catch (LibraryServicesException e){
+            assertTrue(e.getMessage().equals(LibraryServicesException.RECURSO_RESERVADO_EN_HORA));
+        }
+    }
+
+    @Test
+    public void pruebasSotu()throws LibraryServicesException{
+        
     }
 }

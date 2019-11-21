@@ -24,6 +24,7 @@ public class ServicesLibraryImpl implements ServicesLibrary {
     @Inject
     private DaoHorario horarioDao;
 
+    @Override
     public List<Recurso> consultarRecursos() throws LibraryServicesException {
         return recursoDao.consultarRecursos();
     }
@@ -43,7 +44,7 @@ public class ServicesLibraryImpl implements ServicesLibrary {
         ArrayList<Timestamp> fechas=new ArrayList<>();
         fechas.add(fechaIni);
         for(Timestamp i:fechas){
-
+            //Falta la logica
         }
     }
 
@@ -63,8 +64,13 @@ public class ServicesLibraryImpl implements ServicesLibrary {
     }
 
     @Override
-    public Reserva consultarReservaRecurso(Recurso recurso) throws LibraryServicesException {
+    public List<Reserva> consultarReservaRecurso(Recurso recurso) throws LibraryServicesException {
         return reservaDao.consultarReservaRecurso(recurso);
+    }
+
+    @Override
+    public void eliminarReserva(Reserva reserva) throws LibraryServicesException {
+        reservaDao.eliminarReserva(reserva);
     }
 
 

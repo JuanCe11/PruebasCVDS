@@ -2,6 +2,7 @@ package edu.eci.cvds.managedbeans;
 
 import com.google.inject.Inject;
 import edu.eci.cvds.entities.Recurso;
+import edu.eci.cvds.entities.Reserva;
 import edu.eci.cvds.services.AdministratorServicesLibrary;
 import edu.eci.cvds.services.LibraryServicesException;
 import edu.eci.cvds.services.ServicesLibrary;
@@ -32,7 +33,13 @@ public class RecursoBean extends BasePageBean {
     private static final transient Logger log = LoggerFactory.getLogger(UserBean.class);
     private ScheduleModel eventModel = new DefaultScheduleModel();
     private ScheduleEvent event = new DefaultScheduleEvent();
-    
+
+    private String[] ubicaciones = {"Bibioteca B", "Bibioteca G"};
+    private String ubicacionSeleccionada;
+
+    private String[] tipos = {"Computador", "Multimedia","Sala de estudio"};
+    private String tipoSleccionado;
+
     private int id;
 
     @Inject
@@ -50,7 +57,7 @@ public class RecursoBean extends BasePageBean {
     public List<Recurso> getRecursos() throws LibraryServicesException {
         return servicesL.consultarRecursos();
     }
-    
+
     public List<String> getEstados() {
         return recurso.getEstados();
     }
@@ -60,12 +67,23 @@ public class RecursoBean extends BasePageBean {
 
     public void registrarRecurso(String nombre, int capacidad) throws LibraryServicesException {
         int id = servicesA.consultarRecursosAdmin().size() + 1;
+        int tipo = buscarIndice();
         try {
-            recurso = new Recurso(id, 1, nombre, "Biblioteca", capacidad, "Disponible", 1, "PC");
+            recurso = new Recurso(id, tipo+1, nombre, ubicacionSeleccionada, capacidad, "Disponible", tipo+1, tipos[tipo]);
             servicesA.registrarRecurso(recurso);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private int buscarIndice() {
+        int res = -1;
+        for (int i = 0; i <tipos.length ; i++) {
+            if (tipoSleccionado.equals(tipos[i])){
+                res=i;
+            }
+        }
+        return res;
     }
 
     public void eliminarRecurso(int id) {
@@ -76,24 +94,38 @@ public class RecursoBean extends BasePageBean {
         }
     }
 
-    public void reloadAdmin() throws IOException{
+    public void reloadAdmin() throws IOException {
         FacesContext.getCurrentInstance().getExternalContext().redirect("/faces/admin/pages/cambiarEstadoRecurso.xhtml");
     }
-    
-    public void reloadUser() throws IOException{
+
+    public void reloadUser() throws IOException {
         FacesContext.getCurrentInstance().getExternalContext().redirect("/faces/regular/pages/consultarRecursos.xhtml");
     }
     
-    
+    public void reloadGuest() throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/faces/consultarRecursos.xhtml");
+    }
+
     //Calendario del recurso
-    
-    public void fillDate(int id) throws LibraryServicesException{
-        
-        for(Recurso r : servicesL.consultarRecursos()){
-            eventModel.addEvent(new DefaultScheduleEvent(r.getNombre(),getRandomDate(nextDay9Am()),getRandomDate(nextDay11Am())));
+    public void fillDate(int id) throws LibraryServicesException {
+        eventModel = new DefaultScheduleModel();
+        event = new DefaultScheduleEvent();
+        Recurso re = servicesL.consultarRecurso(id);
+        boolean banderaRec = false;
+        for (int i = 0; i < servicesL.consultarReservas().size(); i++){
+            if (servicesL.consultarReservas().get(i).getRecurso().getIdentificadorInterno() == id){
+                banderaRec = true;
+            }
+        }
+        if (banderaRec) {
+            if (servicesL.consultarReservaRecurso(re).size() > 0) {                
+                for (Reserva r : servicesL.consultarReservaRecurso(re)) {
+                    eventModel.addEvent(new DefaultScheduleEvent(r.getRecurso().getNombre() + "  " + r.getUsuario().getNombre(), r.getFechaIniDate(), r.getFechaFinDate()));
+                }
+            }
         }
     }
-    
+
     public Date getRandomDate(Date base) {
         Calendar date = Calendar.getInstance();
         date.setTime(base);
@@ -118,24 +150,6 @@ public class RecursoBean extends BasePageBean {
         calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE), 0, 0, 0);
 
         return calendar;
-    }
-
-    private Date nextDay9Am() {
-        Calendar t = (Calendar) today().clone();
-        t.set(Calendar.AM_PM, Calendar.AM);
-        t.set(Calendar.DATE, t.get(Calendar.DATE) + 1);
-        t.set(Calendar.HOUR, 9);
-
-        return t.getTime();
-    }
-
-    private Date nextDay11Am() {
-        Calendar t = (Calendar) today().clone();
-        t.set(Calendar.AM_PM, Calendar.AM);
-        t.set(Calendar.DATE, t.get(Calendar.DATE) + 1);
-        t.set(Calendar.HOUR, 11);
-
-        return t.getTime();
     }
 
     public ScheduleEvent getEvent() {
@@ -189,4 +203,34 @@ public class RecursoBean extends BasePageBean {
         this.id = id;
         fillDate(id);
     }
+    public void horariosPageGuest(int id) throws IOException, LibraryServicesException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/faces/horarios.xhtml");
+        this.id = id;
+        fillDate(id);
+    }
+
+    public void setUbicacionSeleccionada(String ubicacionSeleccionada) {
+        this.ubicacionSeleccionada = ubicacionSeleccionada;
+    }
+
+    public String getUbicacionSeleccionada() {
+        return this.ubicacionSeleccionada;
+    }
+
+    public String[] getUbicaciones() {
+        return ubicaciones;
+    }
+
+    public String getTipoSleccionado() {
+        return tipoSleccionado;
+    }
+
+    public void setTipoSleccionado(String tipoSleccionado) {
+        this.tipoSleccionado = tipoSleccionado;
+    }
+
+    public String[] getTipos() {
+        return tipos;
+    }
+
 }

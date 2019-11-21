@@ -6,6 +6,9 @@ public class TipoRecurso implements Serializable {
     private int id;
     private String tipo;
 
+    /**
+     * Constructor vacio de la clase TipoRecurso
+     */
     public TipoRecurso(){super();}
 
     /**
@@ -51,6 +54,6 @@ public class TipoRecurso implements Serializable {
 
     @Override
     public String toString() {
-        return Integer.toString(id);
+        return Integer.toString(id)+" "+tipo;
     }
 }

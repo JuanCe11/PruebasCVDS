@@ -21,6 +21,21 @@ public class MyBatisDaoReserva implements DaoReserva {
     @Override
     public void reservarRecurso(Recurso recurso, Usuario usuario, Timestamp fechaIni,Timestamp fechaFin) throws LibraryServicesException{
         try {
+            if(fechaFin.getTime()-fechaIni.getTime()>7200000){
+                throw new LibraryServicesException(LibraryServicesException.RESERVA_MAYOR_A_DOS_HORAS);
+            }
+            List<Reserva> reservasActuales=reservaMapper.consultarReservaRecurso(recurso);
+            for(Reserva i:reservasActuales){
+                if(i.getFechaFin()!=null && i.getFechaInicio()!=null) {
+                    Timestamp fechaIniActual = i.getFechaInicio();
+                    Timestamp fechaFinActual = i.getFechaFin();
+                    boolean fechaInicio = (fechaIni.before(fechaFinActual) && fechaIni.after(fechaIniActual));
+                    boolean fechaFinB = (fechaFin.before(fechaFinActual) && fechaIni.after(fechaIniActual));
+                    if (fechaInicio || fechaFinB) {
+                        throw new LibraryServicesException(LibraryServicesException.RECURSO_RESERVADO_EN_HORA);
+                    }
+                }
+            }
             reservaMapper.reservarRecurso(recurso, usuario, fechaIni, fechaFin);
         }catch (org.apache.ibatis.exceptions.PersistenceException e){
             throw new LibraryServicesException(e.getMessage());
@@ -46,9 +61,18 @@ public class MyBatisDaoReserva implements DaoReserva {
     }
 
     @Override
-    public Reserva consultarReservaRecurso(Recurso recurso) throws LibraryServicesException{
+    public List<Reserva> consultarReservaRecurso(Recurso recurso) throws LibraryServicesException{
         try {
             return reservaMapper.consultarReservaRecurso(recurso);
+        }catch (org.apache.ibatis.exceptions.PersistenceException e){
+            throw new LibraryServicesException(e.getMessage());
+        }
+    }
+
+    @Override
+    public void eliminarReserva(Reserva reserva) throws LibraryServicesException{
+        try{
+            reservaMapper.eliminarReserva(reserva);
         }catch (org.apache.ibatis.exceptions.PersistenceException e){
             throw new LibraryServicesException(e.getMessage());
         }

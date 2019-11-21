@@ -30,34 +30,66 @@ public class Horario implements Serializable {
         this.horaInicio=horaInicio;
     }
 
+    /**
+     * Getter del recurso
+     * @return recurso del horario
+     */
     public Recurso getRecurso() {
         return recurso;
     }
 
+    /**
+     * Setter del recurso
+     * @param recurso El nuevo recurso
+     */
     public void setRecurso(Recurso recurso) {
         this.recurso = recurso;
     }
 
+    /**
+     * Setter de la Hora final del horario
+     * @return la hora final del horario
+     */
     public Timestamp getHoraFin() {
         return horaFin;
     }
 
+    /**
+     * Setter de la hora inicial del horario
+     * @return Hora inical del horario
+     */
     public Timestamp getHoraInicio() {
         return horaInicio;
     }
 
+    /**
+     * Setter de la hora final del recurso
+     * @param horaFin La nueva hora final
+     */
     public void setHoraFin(Timestamp horaFin) {
         this.horaFin = horaFin;
     }
 
+    /**
+     * Setter de la hora inicial del recurso
+     * @param horaInicio La nueva hora inicial
+     */
     public void setHoraInicio(Timestamp horaInicio) {
         this.horaInicio = horaInicio;
     }
 
+    /**
+     * Getter del id
+     * @return el id del horario
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * Setter dle id
+     * @param id el nuevo id
+     */
     public void setId(int id) {
         this.id = id;
     }

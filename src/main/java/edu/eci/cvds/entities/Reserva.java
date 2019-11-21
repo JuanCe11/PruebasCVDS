@@ -11,6 +11,9 @@ public class Reserva implements Serializable {
     private Recurso recurso;
     private Usuario usuario;
 
+    /**
+     * Constructor vacio de la clase Reserva
+     */
     public Reserva(){super();}
 
     /**
@@ -92,21 +95,37 @@ public class Reserva implements Serializable {
         this.recurso = recurso;
     }
 
+    /**
+     * Getter del usuario de la reserva
+     * @return El usuario de la reserva
+     */
     public Usuario getUsuario() {
         return usuario;
     }
 
+    /**
+     * Setter del usuario de la reserva
+     * @param usuario El nuevo usuario de la reserva
+     */
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
     }
 
+    /**
+     * Getter de la fecha inicial de la reserva en formato de Date
+     * @return Date de la fecha inicial
+     */
     public Date getFechaIniDate(){
-        Date date=new Date(fechaInicio.getYear(),fechaInicio.getMonth(),fechaInicio.getDay());
+        Date date=new Date(fechaInicio.getTime());
         return date;
     }
 
+    /**
+     * Getter de la fecha final de la reserva en formato de Date
+     * @return Date de la fecha final
+     */
     public Date getFechaFinDate(){
-        Date date=new Date(fechaFin.getYear(),fechaFin.getMonth(),fechaFin.getDay());
+        Date date=new Date(fechaFin.getTime());
         return date;
     }
 

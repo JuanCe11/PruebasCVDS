@@ -44,5 +44,9 @@ public interface RecursoMapper {
      */
     Recurso consultarRecurso(@Param("id") int id);
 
+    /**
+     * Consulta todos los recursos esten o no esten disponibles
+     * @return una lista de todos los recursos
+     */
     List<Recurso> consultarRecursosAdmin();
 }

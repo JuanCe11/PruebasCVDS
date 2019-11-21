@@ -13,12 +13,14 @@ public class Recurso implements Serializable {
     private String estado;
     private List<String> estados;
 
+    /**
+     * Constructor vacio de la clase recurso
+     */
     public Recurso(){
         super();
         estados = new ArrayList<String>();
         estados.add("Disponible");
         estados.add("No Disponible");
-        estados.add("Mantenimiento");
     }
 
     /**
@@ -39,10 +41,20 @@ public class Recurso implements Serializable {
         estados = new ArrayList<String>();
         estados.add("Disponible");
         estados.add("No Disponible");
-        estados.add("Mantenimiento");
     }
 
 
+    /**
+     * Constructor de la clase recurso
+     * @param identificadorInterno el identificador interno
+     * @param idTipo El id del tipo
+     * @param nombre Nombre del recurso
+     * @param ubicacion Ubicacion del recuros
+     * @param capacidad Capacidad del recurso
+     * @param estado Estado del recurso
+     * @param idTipo2 El id del tipo
+     * @param nombreTipo Nombre del tipo de recurso
+     */
     public Recurso(int identificadorInterno,int idTipo,String nombre,String ubicacion,Integer capacidad,String estado,int idTipo2,String nombreTipo){
         this.nombre=nombre;
         this.ubicacion=ubicacion;
@@ -53,7 +65,6 @@ public class Recurso implements Serializable {
         estados = new ArrayList<String>();
         estados.add("Disponible");
         estados.add("No Disponible");
-        estados.add("Mantenimiento");
     }
 
 
@@ -152,16 +163,30 @@ public class Recurso implements Serializable {
     public String getEstado() {
         return estado;
     }
-    
+
+    /**
+     * Getter de los estados posibles de un recurso
+     * @return Una lista con los estados posibles
+     */
     public List<String> getEstados() {
         return estados;
     }
+
+    /**
+     * Sette de los estados del recurso
+     * @param estados Los nuevos estados del recurso
+     */
     public void setEstados(List<String> estados){
         this.estados = estados;
     }
 
     @Override
     public String toString() {
-        return this.nombre+" "+this.ubicacion+" "+this.identificadorInterno+" "+this.tipoRecurso.toString()+" "+this.capacidad.toString();
+        if(this.capacidad!=null) {
+            return this.nombre + " " + this.ubicacion + " " + this.identificadorInterno + " " + this.tipoRecurso.toString() + " " + this.capacidad.toString();
+        }
+        else{
+            return this.nombre + " " + this.ubicacion + " " + this.identificadorInterno + " " + this.tipoRecurso.toString();
+        }
     }
 }
