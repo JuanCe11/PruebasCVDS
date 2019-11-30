@@ -18,7 +18,7 @@ public interface DaoReserva {
      * @param fechaFin La fecha de final de la reserva
      * @throws LibraryServicesException
      */
-    void reservarRecurso(Recurso recurso, Usuario usuario, Timestamp fechaIni, Timestamp fechaFin) throws LibraryServicesException;
+    void reservarRecurso(Recurso recurso, Usuario usuario, Timestamp fechaIni, Timestamp fechaFin,String tipo) throws LibraryServicesException;
 
     /**
      * Consulta las reservas de un usuario
@@ -48,4 +48,13 @@ public interface DaoReserva {
      * @param reserva la reserva a eliminar
      */
     void eliminarReserva(Reserva reserva) throws LibraryServicesException;
+
+    /**
+     * Consulta todas las reservas activas
+     * @return una lista con todas las reservas activas
+     * @throws LibraryServicesException
+     */
+    List<Reserva> consultarReservasActivas() throws LibraryServicesException;
+
+    Reserva consultarReserva(int id) throws LibraryServicesException;
 }

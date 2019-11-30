@@ -1,5 +1,10 @@
 package edu.eci.cvds.managedbeans;
 
+import com.google.inject.Inject;
+import edu.eci.cvds.entities.Usuario;
+import edu.eci.cvds.services.LibraryServicesException;
+import edu.eci.cvds.services.ServicesLibrary;
+import edu.eci.cvds.services.ServicesLibraryFactory;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.crypto.hash.Sha256Hash;
@@ -17,17 +22,22 @@ import java.io.Serializable;
 import java.util.logging.Level;
 import javax.faces.bean.ManagedBean;
 
-@Named
-@Stateless
+
+
+@ManagedBean(name = "userBean")
 @SessionScoped
-@ManagedBean(name = "userBean", eager = true)
 public class UserBean implements Serializable {
     private static final transient Logger log = LoggerFactory.getLogger(UserBean.class);
-
     private String username;
     private String password;
+    private String nombre;
+    private String tipo;
+    private int carnet;
+    private String carrera;
     private String principalUrl = "/faces/index.xhtml";
     Subject subject;
+
+    private ServicesLibrary servicesL = ServicesLibraryFactory.getInstance().getServicesLibrary();
 
     public UserBean() {
     }
@@ -39,6 +49,7 @@ public class UserBean implements Serializable {
         subject = SecurityUtils.getSubject();
         UsernamePasswordToken token = new UsernamePasswordToken(getUsername(), new Sha256Hash(getPassword()).toHex());
         try {
+            completarUsuario();
             subject.login(token);
             if (subject.hasRole("administrador")) {
                 FacesContext.getCurrentInstance().getExternalContext().redirect("/faces/admin/pages/cambiarEstadoRecurso.xhtml");
@@ -57,6 +68,14 @@ public class UserBean implements Serializable {
         } finally {
             token.clear();
         }
+    }
+
+    private void completarUsuario() throws LibraryServicesException {
+        Usuario us = servicesL.consultarUsuario(username);
+        nombre = us.getNombre();
+        tipo = us.getTipo();
+        carnet = us.getCarnet();
+        carrera = us.getCarrera();
     }
 
     private void facesMessage(String message) {
@@ -87,5 +106,37 @@ public class UserBean implements Serializable {
 
     public void setPassword(String senha) {
         this.password = senha;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public void setCarnet(int carnet) {
+        this.carnet = carnet;
+    }
+
+    public int getCarnet() {
+        return carnet;
+    }
+
+    public String getCarrera() {
+        return carrera;
+    }
+
+    public void setCarrera(String carrera) {
+        this.carrera = carrera;
     }
 }

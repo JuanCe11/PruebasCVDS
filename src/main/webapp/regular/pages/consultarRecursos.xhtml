@@ -19,7 +19,7 @@
         src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
 
     </h:head>
-    <h:body style="margin:0px; padding:0px;">
+    <h:body style="margin:0px; padding:0px;" >
         <div class="head">
             <div class="image">
                 <img src="/resources/img/banner-biblioteca.jpg" style="width:250px;"></img>
@@ -34,8 +34,14 @@
                 <h1>Consultar Recursos Biblioteca ECI</h1>
             </div>
         </div>
+        <div class="nav">
+            <div class="verRecusos">
+                <h:form id="frmm2">
+                    <p:commandButton value="Ver mis reservas" action="#{recursoBean.verReservas()}"/>
+                </h:form>
+            </div>
+        </div>
         <br></br>
-
         <p:panel class="panelregistro">
             <h:panelGroup class="panelregistro" id="panelregistroid">
                 <table class="panelRegistroF" id="Registro_table">

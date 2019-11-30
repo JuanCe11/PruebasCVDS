@@ -1,14 +1,8 @@
 package edu.eci.cvds.services;
 
 import com.google.inject.Injector;
-import edu.eci.cvds.persistence.DaoHorario;
-import edu.eci.cvds.persistence.DaoRecurso;
-import edu.eci.cvds.persistence.DaoReserva;
-import edu.eci.cvds.persistence.DaoTipoRecurso;
-import edu.eci.cvds.persistence.mybatisimpl.MyBatisDaoHorario;
-import edu.eci.cvds.persistence.mybatisimpl.MyBatisDaoRecurso;
-import edu.eci.cvds.persistence.mybatisimpl.MyBatisDaoReserva;
-import edu.eci.cvds.persistence.mybatisimpl.MyBatisTipoRecurso;
+import edu.eci.cvds.persistence.*;
+import edu.eci.cvds.persistence.mybatisimpl.*;
 import edu.eci.cvds.services.impl.AdministratorServicesLibraryImpl;
 import edu.eci.cvds.services.impl.ServicesLibraryImpl;
 import org.mybatis.guice.XMLMyBatisModule;
@@ -39,6 +33,7 @@ public class ServicesLibraryFactory {
                 bind(DaoReserva.class).to(MyBatisDaoReserva.class);
                 bind(DaoTipoRecurso.class).to(MyBatisTipoRecurso.class);
                 bind(DaoHorario.class).to(MyBatisDaoHorario.class);
+                bind(DaoUsuario.class).to(MyBatisDaoUsuario.class);
             }
         });
 
@@ -53,6 +48,7 @@ public class ServicesLibraryFactory {
                 bind(DaoReserva.class).to(MyBatisDaoReserva.class);
                 bind(DaoTipoRecurso.class).to(MyBatisTipoRecurso.class);
                 bind(DaoHorario.class).to(MyBatisDaoHorario.class);
+                bind(DaoUsuario.class).to(MyBatisDaoUsuario.class);
             }
         });
     }

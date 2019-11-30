@@ -39,9 +39,11 @@ public interface ServicesLibrary {
      * @param usuario El usuario que realiza la reserva
      * @param fechaIni La fecha de inicio
      * @param fechaFin La fecha de fin
+     * @param tipoRecurrencia El tipo de recurrencia (Diaria, semanal o mensual)
+     * @param cantidadRecurrencia La cantidad de veces que se va a hacer la recurrencia
      * @throws LibraryServicesException
      */
-    void reservaRecursorecurrente(Recurso recurso, Usuario usuario, Timestamp fechaIni,Timestamp fechaFin) throws  LibraryServicesException;
+    void reservaRecursorecurrente(Recurso recurso, Usuario usuario, Timestamp fechaIni,Timestamp fechaFin,String tipoRecurrencia,String cantidadRecurrencia) throws  LibraryServicesException;
 
     /**
      * Consulta las reservas de un usuario
@@ -80,4 +82,28 @@ public interface ServicesLibrary {
      */
     void eliminarReserva(Reserva reserva) throws LibraryServicesException;
 
+
+    /**
+     * Consulta un usuario
+     * @param username El identificador del usuario
+     * @throws LibraryServicesException
+     */
+    Usuario consultarUsuario(String username) throws LibraryServicesException;
+
+    /**
+     * Consulta el horario de un recurso
+     * @param recurso el recurso del que se desea hacer la consulta
+     * @return una lista con todos los horarios del recurso
+     * @throws LibraryServicesException
+     */
+    List<Horario> horarioRecurso(Recurso recurso) throws LibraryServicesException;
+
+    /**
+     * Consulta todas las reservas activas
+     * @return una lista con todas las reservas activas
+     * @throws LibraryServicesException
+     */
+    List<Reserva> consultarReservasActivas() throws LibraryServicesException;
+
+    Reserva consultarReserva(int id) throws LibraryServicesException;
 }

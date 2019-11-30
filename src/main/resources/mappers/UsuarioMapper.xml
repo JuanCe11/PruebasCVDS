@@ -10,5 +10,18 @@
         <result property="tipo" column="tipo"/>
         <result property="carnet" column="carnet"/>
         <result property="nombre" column="nombre"/>
+        <result property="carrera" column="carrera"/>
     </resultMap>
+
+    <select id="consultarUsuario" parameterType="map" resultMap="UsuarioResult">
+        select
+        id,
+        passw,
+        tipo,
+        carnet,
+        nombre,
+        carrera
+        FROM usuario where id=#{id};
+    </select>
+
 </mapper>

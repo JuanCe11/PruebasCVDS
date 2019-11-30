@@ -18,7 +18,7 @@
             <div class="logout">
                 <h:form id="frmm">
                     <p:commandButton value="Regresar" class="dropdown-item"
-                                     action="#{recursoBean.reloadGuest()}" />
+                                     action="#{recursoBean.reloadUser()}" />
                 </h:form>
             </div>
             <div id="divbarraid" class="divbarra">
@@ -29,24 +29,36 @@
         <br></br>
 
         <div>
-            <h:form>
-                <p:growl id="messages" showDetail="true" />
+            <h:form id="form">
+
+                <p:growl id="messages" showDetail="true" sticky="true" />
 
                 <h:panelGrid columnClasses="value" class="panelHorario">
                     <p:schedule id="schedule" value="#{recursoBean.eventModel}" widgetVar="myschedule" >
-
                         <p:ajax event="dateSelect" listener="#{recursoBean.onDateSelect}" update="eventDetails" oncomplete="PF('eventDialog').show();" />
-                        <p:ajax event="eventSelect" listener="#{recursoBean.onEventSelect}" update="eventDetails" oncomplete="PF('eventDialog').show();" />
+                        <p:ajax event="eventSelect" listener="#{recursoBean.onEventSelect}" update="eventDetails" oncomplete="PF('eventDialog1').show();" />
                         <p:ajax event="eventMove" listener="#{recursoBean.onEventMove}" update="messages" />
                         <p:ajax event="eventResize" listener="#{recursoBean.onEventResize}" update="messages" />
-
                     </p:schedule>
                 </h:panelGrid>
 
+                <p:dialog widgetVar="eventDialog1" header="Horario de reserva" showEffect="clip" hideEffect="clip" modal="true">
+                    <h:panelGrid id="eventDetails1" columns="2">
+
+                        <p:outputLabel for="from" value="Fecha Inicio:" />
+                        <p:outputLabel for="from" value="#{recursoBean.event.startDate}" />
+
+                        <p:outputLabel for="to" value="Fecha Fin:" />
+                        <p:outputLabel for="from" value="#{recursoBean.event.endDate}" />
+
+                        <p:outputLabel for="recurrente" value="Tipo repeticion: " />
+                        <p:outputLabel for="recurrente" value="#{dropdown.tipoRepeticionSeleccionado}: "/>
+
+                    </h:panelGrid>
+                </p:dialog>
+
                 <p:dialog widgetVar="eventDialog" header="Horario de reserva" showEffect="clip" hideEffect="clip" modal="true">
                     <h:panelGrid id="eventDetails" columns="2">
-                        <p:outputLabel for="title" value="Recurso:" />
-                        <p:inputText id="title" value="#{recursoBean.event.title}" required="true" />
 
                         <p:outputLabel for="from" value="Fecha Inicio:" />
                         <p:calendar id="from" value="#{recursoBean.event.startDate}" pattern="dd/MM/yyyy HH:mm" />
@@ -54,11 +66,22 @@
                         <p:outputLabel for="to" value="Fecha Fin:" />
                         <p:calendar id="to" value="#{recursoBean.event.endDate}" pattern="dd/MM/yyyy HH:mm" />
 
-                        <p:outputLabel for="allDay" value="All Day:" />
-                        <h:selectBooleanCheckbox id="allDay" value="#{recursoBean.event.allDay}" />
+                        <p:outputLabel for="recurrente" value="Tipo repeticion: " />
+                        <p:selectOneMenu id="recurrente" value="#{dropdown.tipoRepeticionSeleccionado}" style="width:150px">
+                            <p:ajax listener="#{dropdown.onTipoCambiado}" update="periodo" />
+                            <f:selectItem itemLabel="Tipo de repeticion" itemValue="" noSelectionOption="true" />
+                            <f:selectItems value="#{dropdown.tipoRepeticiones}" />
+                        </p:selectOneMenu>
+
+                        <p:outputLabel for="periodo" value="Cantidad repeticiones: " />
+                        <p:selectOneMenu id="periodo" value="#{dropdown.cantidadRepeticiones}" style="width:150px">
+                            <f:selectItem itemLabel="Seleccione la cantidad" itemValue="" noSelectionOption="true" />
+                            <f:selectItems value="#{dropdown.cantidadesRepeticiones}" />
+                        </p:selectOneMenu>
 
                         <p:commandButton type="reset" value="Reset" />
-                        <p:commandButton id="addButton" value="Save" action="#{recursoBean.addEvent()}" oncomplete="PF('myschedule').update();PF('eventDialog').hide();" />
+                        <p:commandButton id="addButton" value="Save" action="#{recursoBean.addEvent(dropdown.tipoRepeticionSeleccionado,dropdown.cantidadRepeticiones)}" oncomplete="PF('myschedule').update();PF('eventDialog').hide();" update="@form">
+                        </p:commandButton>
                         <p:commandButton id="deleteButton" value="Delete" action="#{recursoBean.deleteEvent()}" oncomplete="PF('myschedule').update();PF('eventDialog').hide();" />
                     </h:panelGrid>
                 </p:dialog>    

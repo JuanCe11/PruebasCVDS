@@ -23,7 +23,7 @@ public class MyBatisDaoRecurso implements DaoRecurso {
         try{
             recursoMapper.registraNuevoRecurso(recurso);
         }catch(org.apache.ibatis.exceptions.PersistenceException e){
-            throw new LibraryServicesException(e.getMessage());
+            throw new LibraryServicesException(LibraryServicesException.ERROR_DE_PERSISTENCIA,e.getMessage());
         }
     }
 
@@ -32,7 +32,7 @@ public class MyBatisDaoRecurso implements DaoRecurso {
         try{
             recursoMapper.eliminarRecursoPermanente(recurso);
         }catch(org.apache.ibatis.exceptions.PersistenceException e){
-            throw new LibraryServicesException(e.getMessage());
+            throw new LibraryServicesException(LibraryServicesException.ERROR_DE_PERSISTENCIA,e.getMessage());
         }
     }
 
@@ -41,7 +41,7 @@ public class MyBatisDaoRecurso implements DaoRecurso {
         try{
             recursoMapper.eliminarRecursoTemporal(recurso);
         }catch (org.apache.ibatis.exceptions.PersistenceException e){
-            throw new LibraryServicesException(e.getMessage());
+            throw new LibraryServicesException(LibraryServicesException.ERROR_DE_PERSISTENCIA,e.getMessage());
         }
     }
 
@@ -50,7 +50,7 @@ public class MyBatisDaoRecurso implements DaoRecurso {
         try{
             recursoMapper.volverAAdmitirRecurso(recurso);
         }catch (org.apache.ibatis.exceptions.PersistenceException e){
-            throw new LibraryServicesException(e.getMessage());
+            throw new LibraryServicesException(LibraryServicesException.ERROR_DE_PERSISTENCIA,e.getMessage());
         }
     }
 
@@ -59,7 +59,7 @@ public class MyBatisDaoRecurso implements DaoRecurso {
         try{
             return recursoMapper.consultarRecursos();
         }catch(org.apache.ibatis.exceptions.PersistenceException e){
-            throw new LibraryServicesException(e.getMessage());
+            throw new LibraryServicesException(LibraryServicesException.ERROR_DE_PERSISTENCIA,e.getMessage());
         }
     }
 
@@ -68,7 +68,7 @@ public class MyBatisDaoRecurso implements DaoRecurso {
         try {
             return recursoMapper.consultarRecurso(id);
         }catch (org.apache.ibatis.exceptions.PersistenceException e){
-            throw new LibraryServicesException(e.getMessage());
+            throw new LibraryServicesException(LibraryServicesException.ERROR_DE_PERSISTENCIA,e.getMessage());
         }
     }
 
@@ -77,7 +77,7 @@ public class MyBatisDaoRecurso implements DaoRecurso {
         try{
             return recursoMapper.consultarRecursosAdmin();
         }catch (org.apache.ibatis.exceptions.PersistenceException e){
-            throw new LibraryServicesException(e.getMessage());
+            throw new LibraryServicesException(LibraryServicesException.ERROR_DE_PERSISTENCIA,e.getMessage());
         }
     }
 }

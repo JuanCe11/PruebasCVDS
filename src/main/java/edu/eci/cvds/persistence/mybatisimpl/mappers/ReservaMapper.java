@@ -16,7 +16,7 @@ public interface ReservaMapper {
      * @param fechaIni La fecha de inicio de la reserva
      * @param fechaFin La fecha de finalizacion de la reserva
      */
-    void reservarRecurso(@Param("recurso") Recurso recurso, @Param("usuario")Usuario usuario, @Param("fechaIni") Timestamp fechaIni,@Param("fechaFin") Timestamp fechaFin);
+    void reservarRecurso(@Param("recurso") Recurso recurso, @Param("usuario")Usuario usuario, @Param("fechaIni") Timestamp fechaIni,@Param("fechaFin") Timestamp fechaFin,@Param("tipo") String tipo);
 
     /**
      * Consulta las reservas de un usuario
@@ -44,4 +44,13 @@ public interface ReservaMapper {
      * @param reserva La reserva a eliminar
      */
     void eliminarReserva(@Param("reserva") Reserva reserva);
+
+    /**
+     * Consulta todas las reservas activas
+     * @return Una lista con todas las reservas activas
+     */
+    List<Reserva> consultarReservasActivas();
+
+
+    Reserva consultarReserva(@Param("id") int id);
 }

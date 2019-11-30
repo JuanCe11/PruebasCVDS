@@ -52,6 +52,8 @@ fecha_ini TIMESTAMP NOT NULL,
 fecha_fin TIMESTAMP NOT NULL,
 id_recurso integer NOT NULL,
 id_usuario VARCHAR(50) NOT NULL,
+estado VARCHAR(50) NOT NULL,
+tipo VARCHAR(50) NOT NULL,
 PRIMARY KEY (id)
 );
 

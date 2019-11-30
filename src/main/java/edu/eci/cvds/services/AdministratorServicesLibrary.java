@@ -1,9 +1,8 @@
 package edu.eci.cvds.services;
 
-import edu.eci.cvds.entities.Recurso;
-import edu.eci.cvds.entities.TipoRecurso;
-import edu.eci.cvds.entities.Usuario;
+import edu.eci.cvds.entities.*;
 
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -54,4 +53,19 @@ public interface AdministratorServicesLibrary {
      * @throws LibraryServicesException
      */
     void reservarRecurso(Recurso recurso, Usuario usuario, Timestamp fechaIni, Timestamp fechaFin) throws LibraryServicesException;
+
+    /**
+     * Ingresa un nuevo horario a un recurso
+     * @param recurso El recurso al ingresar el horario
+     * @param horario El nuevo horario
+     * @throws LibraryServicesException
+     */
+    void ingresarHorario(Recurso recurso, Horario horario) throws LibraryServicesException;
+
+    /**
+     * Obtiene el reporte de las reservas 
+     * @throws LibraryServicesException
+     */
+    void reporteDeOcupacion() throws LibraryServicesException;
+
 }

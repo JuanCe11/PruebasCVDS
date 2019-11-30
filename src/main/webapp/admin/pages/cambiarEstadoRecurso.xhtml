@@ -13,7 +13,7 @@
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css" />
 
         <script type="text/javascript" charset="utf8"
-                src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+        src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
 
     </h:head>
     <h:body style="margin:0px; padding:0px;">
@@ -31,11 +31,26 @@
                 <h1>Consultar Recursos Biblioteca ECI</h1>
             </div>
         </div>
-        <br></br>
+        <div class="nav">
+            <div class="verRecusos">
+                <h:form id="frmm3">
+                    <p:commandButton value="Agregar Recurso" onclick="PF('dlg1').show();"/>
+                </h:form>
+            </div>
+            <div class="verRecusos">
+                <h:form id="frmm4">
+                    <p:commandButton value="Reservar Recurso" onclick="PF('dlg1').show();"/>
+                </h:form>
+            </div>
+            <div class="verRecusos">
+                <h:form id="frmm5">
+                    <p:commandButton value="Ver mis reservas" onclick="PF('dlg1').show();"/>
+                </h:form>
+            </div>
+        </div>
+
         <div class="registrar">
             <h:form id="frmm2">
-                <p:commandButton value="Agregar Recurso" onclick="PF('dlg1').show();"/>
-
                 <p:dialog header="Agregar Recurso" widgetVar="dlg1" resizable="false">
                     <h:panelGrid columns="2" cellpadding="5">
                         <h:outputLabel for="nombre" value="Nombre:" />
@@ -67,9 +82,32 @@
                             <div align="center">
                                 <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
                                 <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
-                            </div></p:confirmDialog>
+                            </div>
+                        </p:confirmDialog>
 
                     </h:panelGrid>
+                </p:dialog>
+                <p:dialog header="Editar Recurso" widgetVar="dlg2" resizable="false">
+                    <h:panelGrid columns="2" cellpadding="2">
+
+                        <label class="bmd-label-floating">Estado:</label>
+                        <h:selectOneMenu value="#{recursoBean.estadoSeleccionado}" class="form-control">
+                            <f:selectItems value="#{recursoBean.getEstadosRecurso()}" />
+                        </h:selectOneMenu>
+
+                        <p:growl id="message3" showDetail="true" />
+                        <p:commandButton class="buttonR" value="Editar" update="message3">
+                            <p:confirm header="Confirmación" message="¿Desea editar este recurso?" icon="pi pi-exclamation-triangle" />
+                            <f:actionListener binding="#{recursoBean.editarEstadoRecurso()}" update="frmm3"/>
+                            <f:actionListener binding="#{recursoBean.reloadAdmin()}" update="frmm4"/>
+                        </p:commandButton>
+                        <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                            <div align="center">
+                                <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+                                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+                            </div>
+                        </p:confirmDialog>
+                    </h:panelGrid>                                            
                 </p:dialog>
             </h:form>
         </div>
@@ -86,6 +124,7 @@
                             <th>Capacidad</th>
                             <th>Tipo</th>
                             <th>Estado</th>
+                            <th>Eliminar</th>
                             <th>Editar</th>
 
                         </tr>
@@ -99,7 +138,7 @@
                                 <td align="center" class="columregistro">#{recursos.tipoRecurso.tipo}</td>
                                 <td align="center" class="columregistro">#{recursos.estado}</td>
                                 <td align="center" class="columregistro">
-                                    <h:form id="frmm3">         
+                                    <h:form id="frmm3">
                                         <p:growl id="message" showDetail="true" />
                                         <p:commandButton class="buttonR"  value="Eliminar Recurso" update="message">
                                             <p:confirm header="Confirmación" message="¿Desea eliminar el recurso?" icon="pi pi-exclamation-triangle" />
@@ -112,7 +151,14 @@
                                                 <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
                                                 <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
                                             </div>
-                                        </p:confirmDialog> 
+                                        </p:confirmDialog>
+                                    </h:form>
+                                </td>
+                                <td align="center" class="columregistro">
+                                    <h:form id="frmm4">
+                                        <p:commandButton value="Editar Recurso" onclick="PF('dlg2').show();">
+                                        <f:actionListener binding="#{recursoBean.seleccionarRecurso(recursos.identificadorInterno)}" update="frmm4"/>
+                                        </p:commandButton>
                                     </h:form>
                                 </td>
                             </tr>

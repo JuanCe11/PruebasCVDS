@@ -19,7 +19,7 @@ public class MyBatisTipoRecurso implements DaoTipoRecurso {
         try {
             tiporecursoMapper.registrarTipoRecurso(tipoRecurso);
         }catch(org.apache.ibatis.exceptions.PersistenceException e){
-            throw new LibraryServicesException(e.getMessage());
+            throw new LibraryServicesException(LibraryServicesException.ERROR_DE_PERSISTENCIA,e.getMessage());
         }
     }
 }

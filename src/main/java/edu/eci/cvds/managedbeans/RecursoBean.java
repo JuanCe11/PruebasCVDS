@@ -7,6 +7,7 @@ import edu.eci.cvds.services.AdministratorServicesLibrary;
 import edu.eci.cvds.services.LibraryServicesException;
 import edu.eci.cvds.services.ServicesLibrary;
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 import org.slf4j.Logger;
@@ -40,6 +41,10 @@ public class RecursoBean extends BasePageBean {
     private String[] tipos = {"Computador", "Multimedia","Sala de estudio"};
     private String tipoSleccionado;
 
+    private String[] estadosRecurso = {"Disponible", "No Disponible"};
+    private String estadoSeleccionado;
+    private int idSeleccionado;
+    private String usuario;
     private int id;
 
     @Inject
@@ -63,8 +68,25 @@ public class RecursoBean extends BasePageBean {
     }
 
     public void editarEstadoRecurso() {
+        if (estadoSeleccionado.equals("Disponible")){
+            try{
+                servicesA.volverAAdmitirElRecurso(servicesL.consultarRecurso(idSeleccionado));
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }else if(estadoSeleccionado.equals("No Disponible")){
+            try{
+                servicesA.eliminarUnRecursoTemporal(servicesL.consultarRecurso(idSeleccionado));
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
     }
-
+    
+    public void seleccionarRecurso(int idSeleccionado){
+        this.idSeleccionado = idSeleccionado;
+    }
+    
     public void registrarRecurso(String nombre, int capacidad) throws LibraryServicesException {
         int id = servicesA.consultarRecursosAdmin().size() + 1;
         int tipo = buscarIndice();
@@ -106,21 +128,27 @@ public class RecursoBean extends BasePageBean {
         FacesContext.getCurrentInstance().getExternalContext().redirect("/faces/consultarRecursos.xhtml");
     }
 
+    public void verReservas() throws IOException {
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/faces/regular/pages/verReservas.xhtml");
+    }
+
     //Calendario del recurso
     public void fillDate(int id) throws LibraryServicesException {
         eventModel = new DefaultScheduleModel();
         event = new DefaultScheduleEvent();
         Recurso re = servicesL.consultarRecurso(id);
+        List<Reserva> lista = servicesL.consultarReservas();
         boolean banderaRec = false;
-        for (int i = 0; i < servicesL.consultarReservas().size(); i++){
-            if (servicesL.consultarReservas().get(i).getRecurso().getIdentificadorInterno() == id){
+        for (int i = 0; i < lista.size(); i++){
+            if (lista.get(i).getRecurso().getIdentificadorInterno() == id){
                 banderaRec = true;
             }
         }
+        lista = servicesL.consultarReservaRecurso(re);
         if (banderaRec) {
-            if (servicesL.consultarReservaRecurso(re).size() > 0) {                
-                for (Reserva r : servicesL.consultarReservaRecurso(re)) {
-                    eventModel.addEvent(new DefaultScheduleEvent(r.getRecurso().getNombre() + "  " + r.getUsuario().getNombre(), r.getFechaIniDate(), r.getFechaFinDate()));
+            if (lista.size() > 0) {
+                for (Reserva r : lista) {
+                    eventModel.addEvent( new DefaultScheduleEvent(r.getRecurso().getNombre() + "  " + r.getUsuario().getNombre()+" "+r.getTipo(), r.getFechaIniDate(), r.getFechaFinDate()));
                 }
             }
         }
@@ -160,15 +188,21 @@ public class RecursoBean extends BasePageBean {
         this.event = event;
     }
 
-    public void addEvent() {
-        if (event.getId() == null) {
-            eventModel.addEvent(event);
-        } else {
-            eventModel.updateEvent(event);
+    public void addEvent(String tipoRecurencia, String cantidadRecurrencia) throws LibraryServicesException, IOException {
+        if (tipoRecurencia == null || tipoRecurencia.equals("")){
+            servicesL.reservarRecurso(servicesL.consultarRecurso(idSeleccionado),servicesL.consultarUsuario(usuario),new Timestamp(event.getStartDate().getTime()),new Timestamp(event.getEndDate().getTime()));
+        }else{
+            if (cantidadRecurrencia == null || cantidadRecurrencia.equals("")){
+                FacesContext context = FacesContext.getCurrentInstance();
+                context.addMessage(null, new FacesMessage("Error",  "No se selecciono la cantidad de la recurrencia en la reserva" ));
+            }else{
+                servicesL.reservaRecursorecurrente(servicesL.consultarRecurso(idSeleccionado),servicesL.consultarUsuario(usuario),new Timestamp(event.getStartDate().getTime()),new Timestamp(event.getEndDate().getTime()),tipoRecurencia,cantidadRecurrencia);
+                event = new DefaultScheduleEvent();
+                horariosPage(idSeleccionado);
+            }
         }
-
-        event = new DefaultScheduleEvent();
     }
+
 
     public void onEventSelect(SelectEvent selectEvent) {
         event = (ScheduleEvent) selectEvent.getObject();
@@ -199,13 +233,13 @@ public class RecursoBean extends BasePageBean {
     }
 
     public void horariosPage(int id) throws IOException, LibraryServicesException {
-        FacesContext.getCurrentInstance().getExternalContext().redirect("/faces/regular/pages/horarios.xhtml");
-        this.id = id;
+        idSeleccionado = id;
         fillDate(id);
+        FacesContext.getCurrentInstance().getExternalContext().redirect("/faces/regular/pages/horarios.xhtml");
     }
     public void horariosPageGuest(int id) throws IOException, LibraryServicesException {
         FacesContext.getCurrentInstance().getExternalContext().redirect("/faces/horarios.xhtml");
-        this.id = id;
+        idSeleccionado = id;
         fillDate(id);
     }
 
@@ -231,6 +265,30 @@ public class RecursoBean extends BasePageBean {
 
     public String[] getTipos() {
         return tipos;
+    }
+
+    public String[] getEstadosRecurso(){
+        return estadosRecurso;
+    }
+
+    public String getEstadoSeleccionado() {
+        return estadoSeleccionado;
+    }
+
+    public void setEstadoSeleccionado(String estadoSeleccionado) {
+        this.estadoSeleccionado = estadoSeleccionado;
+    }
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
+
+    public List<Reserva> getReservasUsuario() throws LibraryServicesException {
+        return servicesL.consultarReservasUsuario(usuario);
     }
 
 }

@@ -8,7 +8,7 @@
   <link rel="icon" type="image/png" href="/resources/img/libro.png" />
   <link rel="stylesheet" type="text/css" href="/resources/css/style.css" media="screen" />
 </h:head>
-<h:body>
+<h:body nload="noBack();" onpageshow="if (event.persisted) noBack();" onunload="">
   <div class="page">
     <div class="container">
       <div class="left">
@@ -35,7 +35,9 @@
 
                 <label for="email">Password</label>
                 <p:password id="password" required="true" value="#{userBean.password}"/>
-                <p:commandButton id="ingresar" value="Login" action="#{userBean.doLogin()}" />
+                <p:commandButton id="ingresar" value="Login" action="#{userBean.doLogin()}" >
+                    <f:actionListener binding="#{recursoBean.setUsuario(userBean.username)}" update="frmm2"/>
+                </p:commandButton>
 				<p:messages id="messages" showDetail="true" closable="true">
 				<p:autoUpdate />
 				</p:messages> 

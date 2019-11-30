@@ -10,6 +10,8 @@ public class Reserva implements Serializable {
     private Timestamp fechaFin;
     private Recurso recurso;
     private Usuario usuario;
+    private String estado;
+    private String tipo;
 
     /**
      * Constructor vacio de la clase Reserva
@@ -23,12 +25,46 @@ public class Reserva implements Serializable {
      * @param fechaFin fecha de fin de la renta
      * @param recurso el recurso rentado
      */
-    public Reserva(int id,Timestamp fechaInicio,Timestamp fechaFin,Recurso recurso,Usuario usuario){
+    public Reserva(int id,Timestamp fechaInicio,Timestamp fechaFin,Recurso recurso,Usuario usuario,String estado,String tipo){
         this.id=id;
         this.fechaInicio=fechaInicio;
         this.fechaFin=fechaFin;
         this.recurso=recurso;
         this.usuario=usuario;
+        this.estado=estado;
+        this.tipo=tipo;
+    }
+
+    /**
+     * Setter del tipo
+     * @param tipo el nuevo tipo
+     */
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    /**
+     * Getter del tipo
+     * @return si es recurrente o normal
+     */
+    public String getTipo() {
+        return tipo;
+    }
+
+    /**
+     * Setter del estado
+     * @param estado el nuevo estado
+     */
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    /**
+     * Getter del estado
+     * @return el estado de la reserva
+     */
+    public String getEstado() {
+        return estado;
     }
 
     /**
