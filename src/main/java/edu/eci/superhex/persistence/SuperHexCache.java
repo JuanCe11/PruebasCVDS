@@ -34,6 +34,10 @@ public class SuperHexCache {
         jugadores.get(name).add(player);
     }
 
+    public void removePlayer(String name,Jugador player){
+        jugadores.get(name).remove(player);
+    }
+
     public List<Sala> getSalas() {
         ArrayList lista = new ArrayList();
         for (ConcurrentHashMap.Entry<String, Sala> entry : salas.entrySet()) {

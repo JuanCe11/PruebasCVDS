@@ -31,6 +31,23 @@ var app = (function () {
         stompClient.send("/app/newroom."+name,{},JSON.stringify(sala));
     }
 
+    function join(el){
+        var nombre = document.getElementById("text").value;
+        if( nombre == null||nombre ==""){
+            console.log("nombre "+nombre);
+            console.log("Lanzando la alerta");
+            toastr["warning"]("The username can't be empty","Username fail");
+            console.log("se lanzo la alerta");
+        }else{
+            username = document.getElementById("text").value;
+            mostrarJoin();
+            var sala = $(el).find("td:first-child").text();
+            console.log("Sala: "+sala);
+            unirseSala(sala);
+        }
+
+    }
+
     function unirseSala(name){
         var user = new Jugador(username);
         joinedRoom = name;
@@ -45,19 +62,20 @@ var app = (function () {
 
     function salirSala(){
         var user = new Jugador(username);
+        stompClient.unsubscribe("joined."+joinedRoom);
         stompClient.send("/app/exitroom."+joinedRoom,{},JSON.stringify(user));
+        stompClient.subscribe('/topic/created', function (message) {
+            var salas = JSON.parse(message.body);
+            _tableSalas(salas);
+        },{id:"salaGeneral"});
         mostrarInicial();
     }
 
-
     function _tableJugadores(data){
         var tabla = document.getElementById("tablaSalas");
-        if (tabla.style.display = "block"){
-            tabla.style.display = "none";
-            var tabla = document.getElementById("tablaJugadores");
-            tabla.style.display = "block";
-        }
-
+        tabla.style.display = "none";
+        var tabla = document.getElementById("tablaJugadores");
+        tabla.style.display = "block";
         $("#jugadores").empty();
         for (var i = 0; i < data.length; i++) {
             var markup = "<tr> <td>"+ data[i].name;
@@ -68,13 +86,13 @@ var app = (function () {
 
     function _tableSalas(data){
         var tabla = document.getElementById("tablaJugadores");
-        if (tabla.style.display = "none"){
-            console.log(data);
-            $("#salas").empty();
-            for (var i = 0; i < data.length; i++) {
-                var markup = "<tr> <td>"+ data[i].name +"</td> <td>"+ data[i].players;
-                $("#salas").append(markup)
-            }
+        tabla.style.display = "none"
+        var tabla = document.getElementById("tablaSalas");
+        tabla.style.display = "block";
+        $("#salas").empty();
+        for (var i = 0; i < data.length; i++) {
+            var markup = "<tr onclick=app.join(this)> <td>"+ data[i].name +"</td> <td>"+ data[i].players;
+            $("#salas").append(markup);
         }
     }
 
@@ -108,22 +126,15 @@ var app = (function () {
 
     return{
         connectCreate: function () {
-            username = document.getElementById("text").value;
-            mostrarCreate();
-        },
-        connectJoin: function () {
-            var nombre = document.getElementById("text").value;
+            var nombre =    document.getElementById("text").value;
             if( nombre == null||nombre ==""){
-                console.log("nombre "+nombre);
-                toastr.error("Noooo oo oo ooooo!!!", "Title", {
-                    "timeOut": "0",
-                    "extendedTImeout": "0"
-                });
+                toastr["warning"]("The username can't be empty","Username fail");
             }else{
                 username = document.getElementById("text").value;
-                mostrarJoin();
+                mostrarCreate();
             }
         },
+        join:join,
         connect: function () {
             if (stompClient !== null) {
                 stompClient.disconnect();
@@ -133,5 +144,6 @@ var app = (function () {
         },
         crearSala:crearSala,
         unirseSala:unirseSala,
+        salirSala:salirSala
     }
 })();

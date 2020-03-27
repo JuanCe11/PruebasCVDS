@@ -44,4 +44,18 @@ public class NewRoomController {
         msgt.convertAndSend("/topic/created",cache.getSalas());
         msgt.convertAndSend("/topic/joined."+name,cache.getJugadorBySala(name) );
     }
+
+    @MessageMapping("/exitroom.{name}")
+    public void handleExitRoom(Jugador player,@DestinationVariable String name) throws Exception {
+        System.out.println("Eliminar jugador recibido en el servidor!: "+player.getName()+" para la sala "+name);
+        if(cache.existeSala(name)){
+            Sala s = cache.getSala(name);
+            s.removePlayer();
+            cache.removePlayer(name,player);
+        }else{
+            throw new SuperHexPersistenceException(SuperHexPersistenceException.SALA_NO_EXISTE);
+        }
+        msgt.convertAndSend("/topic/created",cache.getSalas());
+        msgt.convertAndSend("/topic/joined."+name,cache.getJugadorBySala(name) );
+    }
 }
