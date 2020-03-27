@@ -1,74 +1,101 @@
-# arsw_lab1
+# SUPERHEX+
 
-***Part I - Introduction to Java Threads***
-
-As reviewed in the readings, complete the CountThread classes, so that they define the life cycle of a thread that prints the numbers between A and B. 
-
-![](PARALLELISM-JAVA_THREADS_MAVEN-INTRODUCTION_BBP_FORMULA/img/1.png)
+[![M-S-Games](https://circleci.com/gh/M-S-Games/SUPERHEXPlus.svg?style=svg)](https://github.com/M-S-Games/SUPERHEXPlus)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/35265f294e494069b52aee3218a51106)](https://www.codacy.com/gh/M-S-Games/SUPERHEXPlus?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=M-S-Games/SUPERHEXPlus&amp;utm_campaign=Badge_Grade)
 
 
-*Complete the main method of the CountMainThreads class so that:*
-1. Create 3 threads of type CountThread, assigning the first one the interval [0..99], the second one [99..199], and the third one [200..299]. 
+## Integrantes 
+- Miguel Ángel Castellanos Salamanca 
+- Juan Sebastian Gómez López 
+## Resumen:
+Para este proyecto se tomó la decisión de reinventar un juego que ya existe con un sistema de competencia mucho más dinámico y emocionante. Mas adelante se explicará el juego y las modificaciones que se van a implementar para el mismo.
 
-![](PARALLELISM-JAVA_THREADS_MAVEN-INTRODUCTION_BBP_FORMULA/img/2.png)
+## SUPERHEX:
+Con la gran acogida que tuvieron los juegos .io en el mundo, llegó SUPERHEX.io. El juego consiste en ganar puntos consiguiendo territorio en un tablero llenando hexágonos de tu color y matando a otros jugadores. Al ganar puntos se va escalando en una tabla de posiciones con todos los jugadores del servidor, el objetivo final del juego es llegar a los primeros lugares y estar el mayor tiempo posible.
+Para nuestra versión del juego solo vamos a tomar las mecánicas del juego, pero ahora vamos a modificar el objetivo del juego y vamos a agregar un nuevo elemento. En la parte modificaciones se explicarán en detalle el juego.
+### [Reglamento](https://github.com/M-S-Games/SUPERHEXPlus/blob/master/Reglamento.md)
 
+## Modificaciones:
+Las modificaciones se dividen en dos partes:
+1. Objetivo del juego: El objetivo en SUPERHEX+ es ser el ultimo jugador vivo en el servidor. Se Inician con un máximo de 25 jugadores en la partida y se tiene un tamaño inicial del tablero, al pasar el tiempo el tamaño del tablero se va reduciendo mientras los jugadores van ganando terreno y van matando a otros jugadores. La partida termina cuando solo hay un jugador vivo.
+2. 	Minas: en el tablero se distribuyen aleatoriamente minas las cuales afectarán al jugador solo si éste pasa sobre el hexágono. Las minas son visibles a 3 hexágonos de distancia.
+### [Definición](https://github.com/M-S-Games/SUPERHEXPlus/blob/master/Definicion.md)
 
-2. Start all three threads with start(). 
+## Mockups
+### Pantalla incial 
 
-3. Run and check the output on screen. 
+![pantalla inicial](https://github.com/M-S-Games/SUPERHEXPlus/blob/master/Images/inicial.PNG)
 
-4. Change the beginning with start() to run(). How does the output change? Why?
+Es una pantalla muy sencilla donde el usuario tiene las opciones de crear una sala para jugar o unirse a una sala ya creada.
 
-**Usando start**
+### Crear sala
 
-![](PARALLELISM-JAVA_THREADS_MAVEN-INTRODUCTION_BBP_FORMULA/img/s.png)
+![crearSala](https://github.com/M-S-Games/SUPERHEXPlus/blob/master/Images/crearSala.PNG)
 
-**Usando run**
+Aqui el usuario tiene un espacio de texto para poner el nombre de la sala y un boton para crearla.
 
-![](PARALLELISM-JAVA_THREADS_MAVEN-INTRODUCTION_BBP_FORMULA/img/r.png)
+### Esperando crear partida
 
-  
-Usando start los hilos se ejecutan en un un orden diferente al especificado en el codigo, mientras que usando run los hilos se inician de acuerdo a la forma especificada en el codigo. Esto sucede porque al usar el metodo start() se asigna un nuevo hilo y este llama al método run(), esto quiere decir que usando el metodo start() su método run se ejecuta en hilos separados (simultaneamente), mientras que al llamar el método run() directamente no se crean multiples subprocesos por lo que la ejecución se refleja de forma simultanea.
+![esperandoCrearSala](https://github.com/M-S-Games/SUPERHEXPlus/blob/master/Images/esperandoCrear.PNG)
 
-***Part II - BBP Formula Exercise***
+El usuario que creo la sala (el líder de la sala) ve en tiempo real los usuarios que van ingresando a la sala y tiene un boton para cancelar la sala. Al momento de cancelar la sala el líder vuelve a la pantalla de crear la sala.
 
+### Unirse a sala
 
-The BBP formula (Bailey – Borwein – Plouffe formula) is an algorithm that allows you to calculate the nth digit of PI in base 16, with the particularity of not needing to calculate us n-1 previous digits. This feature makes it possible to convert the problem of calculating a massive number of PI digits (in base 16) to a shamefully parallel one. In this repository you will find the implementation, along with a set of tests.
+![unirseSala](https://github.com/M-S-Games/SUPERHEXPlus/blob/master/Images/unirseSala.PNG)
 
+Aqui el usuario tiene un espacio de texto para poner el nombre de la sala y un boton para unirse.
 
-For this exercise you want to calculate, in the shortest possible time, and in a single machine (taking advantage of the multi-core characteristics of the same) at least the first million digits of PI (in base 16).
+### Esperando unirse a partida
 
+![esperandoUnirSala](https://github.com/M-S-Games/SUPERHEXPlus/blob/master/Images/esperandoUnir.PNG)
 
-1. Create a Thread type class that represents the life cycle of a thread that calculates a portion of the required digits. 
+Cuando se une a una sala puede ver los jugadores que ya se unieron y tiene un boton para abandonar la sala. Si el usuario abandona la sala o el líder cancela la partida, el usuario se redirecciona a la pantalla de unirse a una sala.
 
-![](PARALLELISM-JAVA_THREADS_MAVEN-INTRODUCTION_BBP_FORMULA/img/p1.png)
+### Pantalla de juego 
 
-2. Have the PiDigits.getDigits() function receive as an additional parameter an N value, corresponding to the number of threads between which the solution is to be parallelized. Have that function wait until the N threads finish solving the problem to combine the answers and then return the result. For this, review the join method of the Java concurrency API. 
+![pantalla juego 1](https://github.com/M-S-Games/SUPERHEXPlus/blob/master/Images/2.png)
+![pantalla juego 2](https://github.com/M-S-Games/SUPERHEXPlus/blob/master/Images/3.png)
 
-![](PARALLELISM-JAVA_THREADS_MAVEN-INTRODUCTION_BBP_FORMULA/img/p2.png)
+En la pantalla de juego solo se tiene información de estado de la partida a la parte superiroir y el resto es el movimiento del jugador.
 
-3. Adjust the JUnit tests, considering the cases of using 1, 2 or 3 threads (the last one to consider an odd number of threads!)
+### Pantalla final
 
-***Part III - Performance Evaluation***
+![pantalla final](https://github.com/M-S-Games/SUPERHEXPlus/blob/master/Images/4.png)
 
-From the above, implement the following sequence of experiments to calculate the million digits (hex) of PI, taking their execution times (be sure to do them on the same machine):
+Se muestra un resumen de la partida del jugador junto a un aviso de fin de partida y un boton de volver a jugar que lo lleva a la pantalla incial.
 
-1. Single thread. 
+## Casos de Uso
 
-3. As many threads as processing cores (have the program determine this using the Runtime API). So many threads as double processing cores. 
+![CU](https://github.com/M-S-Games/SUPERHEXPlus/blob/master/Images/CasosUso.png)
 
-3. 200 threads.
+### 1. Crear Sala.
+- Como jugador quiero crear una sala para jugar con amigos o crear mi propia partida.
+- Criterios: Para poder crear una sala debo ingresar mi nombre de usuario y asignarle un nombre a la sala; además debo tener la opción de cancelarla en cualquier momento.
+### 2. Unirme a Sala.
+- Como jugador quiero ver las salas disponibles y unirme a una para jugar con amigos o ingresar a una partida.
+- Criterios: Debo poder ver todas las salas que están disponibles en el momento y poder seleccionar una.
+### 3. Dominar Area. 
+- Como jugador quiero encerrar un área y dominarla para comenzar a acumular en la puntuación. 
+- Criterios: Solamente se podrá dominar el área si ningún jugador choca con los bordes de la misma antes de cerrarla por completo.
+### 4. Eliminar Adversario.
+- Como jugador quiero poder eliminar a mi adversario para acercarme a la victoria.
+- Criterios: Para poder eliminar al adversario debo chocar con la linea de una zona que no haya terminado de delimitar también es posible guiarlo hacia una mina o los limites de la zona.
+### 5. Ver Score Board.
+- Como jugador quiero ver el Score Board para poder tener la información de los jugadores compitiendo en la partida.
+### 6. Ver Historial.
+- Criterios: El Score Board se debe mostrar permanentemente, indicando el número de asesinatos hasta el momento y la cantidad de jugadores que aún siguen compitiendo en la partida.
+- Como usuario quiero ver el historial de partidas jugadas en la plataforma para analizar el uso de la misma.
+- Criterios: Se debe generar un reporte con el historico de las partidas jugadas en la plataforma.
 
-5. 500 threads 
+## Base de Datos
 
-When starting the program, run the jVisualVM monitor, and as the tests run, check and record the CPU and memory consumption in each case.
+![DB](https://github.com/M-S-Games/SUPERHEXPlus/blob/master/Images/DB.png)
 
-With the above, and with the execution times given, graph solution time vs. Number of threads. Analyze and propose hypotheses with your partner for the following questions (you can take into account what is reported by jVisualVM):
+## Diagrama de Clases
 
-1. According to Amdahls law, where S (n) is the theoretical performance improvement, P the parallel fraction of the algorithm, and n the number of threads, the greater n, the greater the improvement should be. Why is the best performance not achieved with the 500 threads? How does this performance compare when 200 are used?.  
+![DC](https://github.com/M-S-Games/SUPERHEXPlus/blob/master/Images/Clases.png)
 
-2. How does the solution behave using as many processing threads as cores compared to the result of using twice as much?
+## Diagrama de Componentes
 
-3. According to the above, if for this problem instead of 500 threads on a single CPU, 1 wire could be used on each of 500 hypothetical machines, would Amdahls's law be better applied? If, instead, c threads were used in 500 / c distributed machines (where c is the number of cores of said machines), would it be improved? Explain your answer.
-
-
+![Comp](https://github.com/M-S-Games/SUPERHEXPlus/blob/master/Images/Componentes.png)

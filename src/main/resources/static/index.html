@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Inicial</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
+    <script src="/webjars/bootstrap/4.1.2/js/bootstrap.min.js"></script>
+    <script src="/app.js"></script>
+    <script src="/cambioVistas.js"></script>
+    <script src="/webjars/jquery/jquery.min.js"></script>
+    <script src="/webjars/toastr/toastr.js"></script>
+    <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+    <link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="fonts/iconic/css/material-design-iconic-font.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/animsition/css/animsition.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/daterangepicker/daterangepicker.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="css/util.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+
+</head>
+
+
+
+<body onload="app.connect()" style="background-image: url('images/background.jpg'); width: 100%; height: auto;" >
+<div class="container" w>
+    <form class="login100-form validate-form">
+        <span class="login100-form-logo">
+            <i class="zmdi zmdi-gamepad"></i>
+        </span>
+        <span class="login100-form-title p-b-34 p-t-27">
+            Super Hex +
+        </span>
+        <div class="row justify-content-center align-items-center" data-validate = "Enter username">
+            <div class="wrap-input100 validate-input" >
+                <input class="input100" id="text" type="text" placeholder="Username" >
+                <span class="focus-input100" data-placeholder="&#xf207;"></span>
+            </div>
+            <div class="column px-md-5">
+                <div class="container-login100-form-btn">
+                    <button type="button" id="botonArriba" class="login100-form-btn" onclick="app.connectCreate()">Create Room</button>
+                </div>
+
+                <div class="container-login100-form-btn">
+                    <button type="button" id="botonAbajo" class="login100-form-btn" onclick="app.connectJoin()">Join Room</button>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="row justify-content-center" id="tablaSalas" style="display:block">
+        <table class="table table-striped" style="font-family:Georgia, Garamond, Serif;color:white;font-style:italic;">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Nombre Sala</th>
+                    <th scope="col">Cantidad Jugadores</th>
+                </tr>
+            </thead>
+            <tbody id ="salas" style="font-family:Georgia, Garamond, Serif;color:white;font-style:italic;"></tbody>
+        </table>
+    </div>
+
+    <div class="row justify-content-center" id="tablaJugadores" style="display:none">
+        <table class="table table-striped" style="font-family:Georgia, Garamond, Serif;color:white;font-style:italic;">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Nombre Jugador</th>
+                </tr>
+            </thead>
+            <tbody id ="jugadores" style="font-family:Georgia, Garamond, Serif;color:white;font-style:italic;"></tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
